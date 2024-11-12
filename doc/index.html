@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">    
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+
+<body onload="render()">
+  <div id="cesiumContainer"></div>
+  <div id="toolbar"></div>
+  <script>
+    async function render()
+    {
+      Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MGI0NzE1NS1kNDVlLTRmODYtYTUzNi01NDFiODRjYTNmMzMiLCJpZCI6MjU0MzMyLCJpYXQiOjE3MzEzMTA5NjN9.FL0TlcS8arYOpmDYTDBi8-R11bNwtEmQUYgnBy2pzOc";
+
+      const viewer = new Cesium.Viewer("cesiumContainer", {
+        terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(1)
+      });
+      viewer.scene.globe.depthTestAgainstTerrain = true;
+
+      try 
+      {
+        // 애셋을 추가한다.
+        var tileset = await Cesium.Cesium3DTileset.fromIonAssetId(96188);
+        viewer.scene.primitives.add(tileset);
+
+        tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2816137);
+        viewer.scene.primitives.add(tileset);
+
+        tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2815763);
+        viewer.scene.primitives.add(tileset);
+        
+        await viewer.scene.camera.setView({
+          destination: Cesium.Cartesian3.fromDegrees(127.056718, 36.527274, 300), // 위도, 경도, 높이
+          orientation: new Cesium.HeadingPitchRoll.fromDegrees(0, -10, 0,), // Heading(Yaw), Pitch, Roll(bank)
+        });      
+      } catch (error) 
+      {
+        console.log(error);
+      }
+    };
+  </script>
+</body>
+</html>
